@@ -1,0 +1,2016 @@
+<?php
+/**
+ * Rural AI Meetup Anceu — Main Template
+ */
+$theme_uri = get_template_directory_uri();
+?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="<?php echo $theme_uri; ?>/favicon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rural AI Meetup Anceu · 24–28 junio 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #060f06;
+      --bg2:       #0d1a0d;
+      --bg3:       #112011;
+      --green:     #4ade80;
+      --green-dim: #22c55e;
+      --green-dark:#166534;
+      --gold:      #f59e0b;
+      --text:      #e2f0e2;
+      --muted:     #6b7c6b;
+      --glass:     rgba(74,222,128,0.06);
+      --glass-b:   rgba(74,222,128,0.18);
+      --radius:    16px;
+      --radius-sm: 8px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--green-dark); border-radius: 3px; }
+
+    /* ── Canvas particles ── */
+    #particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .45; }
+
+    /* ── Navbar ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 32px;
+      background: rgba(6,15,6,.7);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(74,222,128,.12);
+    }
+
+    .nav-logo {
+      font-family: 'Space Mono', monospace;
+      font-weight: 700; font-size: 13px;
+      color: var(--green);
+      letter-spacing: .08em;
+      text-decoration: none;
+    }
+
+    .nav-links { display: flex; gap: 24px; }
+    .nav-links a {
+      color: var(--muted); font-size: 13px; text-decoration: none;
+      transition: color .2s;
+      font-weight: 500;
+    }
+    .nav-links a:hover { color: var(--green); }
+    .nav-links a.nav-link-rh:hover { color: var(--gold); }
+
+    .nav-badge {
+      background: rgba(74,222,128,.12);
+      border: 1px solid rgba(74,222,128,.3);
+      color: var(--green);
+      font-size: 11px; font-weight: 600;
+      padding: 4px 12px; border-radius: 100px;
+      letter-spacing: .06em;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 100px 64px 80px;
+      gap: 40px;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .hero-content { text-align: left; }
+
+    .hero-3d {
+      position: relative;
+      height: 520px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    #logo-3d { width: 100%; height: 100%; display: block; }
+
+    .logo-glow {
+      position: absolute; bottom: -10px;
+      left: 50%; transform: translateX(-50%);
+      width: 55%; height: 80px;
+      background: radial-gradient(ellipse, rgba(249,115,22,.3) 0%, transparent 70%);
+      filter: blur(24px);
+      pointer-events: none;
+      animation: glowPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes glowPulse {
+      0%, 100% { opacity: .7; }
+      50% { opacity: 1; transform: translateX(-50%) scaleX(1.15); }
+    }
+
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(74,222,128,.08);
+      border: 1px solid rgba(74,222,128,.25);
+      color: var(--green);
+      font-size: 12px; font-weight: 600;
+      padding: 6px 16px; border-radius: 100px;
+      letter-spacing: .1em;
+      margin-bottom: 28px;
+      animation: fadeUp .7s ease both;
+    }
+
+    .hero-tag::before {
+      content: '';
+      width: 7px; height: 7px;
+      background: var(--green);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .3; }
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 9vw, 7.5rem);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -.03em;
+      animation: fadeUp .7s .1s ease both;
+    }
+
+    .hero h1 .line1 { display: block; color: var(--text); }
+    .hero h1 .line2 {
+      display: block;
+      background: linear-gradient(
+        105deg,
+        var(--green) 0%,
+        #86efac 18%,
+        var(--gold) 36%,
+        #fde68a 50%,
+        var(--green) 64%,
+        #86efac 82%,
+        var(--gold) 100%
+      );
+      background-size: 300% 100%;
+      background-position: 0% 50%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      cursor: default;
+    }
+    .hero h1 .line3 { display: block; color: var(--muted); }
+
+    .hero-sub {
+      margin-top: 28px;
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: var(--muted);
+      font-weight: 400;
+      animation: fadeUp .7s .2s ease both;
+    }
+
+    .hero-meta {
+      display: flex; flex-wrap: wrap; gap: 16px;
+      justify-content: flex-start;
+      margin-top: 36px;
+      animation: fadeUp .7s .3s ease both;
+    }
+
+    .hero-meta .chip {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--glass);
+      border: 1px solid var(--glass-b);
+      padding: 10px 20px; border-radius: 100px;
+      font-size: 14px; font-weight: 500;
+      backdrop-filter: blur(10px);
+      color: var(--text);
+    }
+
+    .chip-icon { font-size: 16px; }
+
+    .hero-cta {
+      margin-top: 44px;
+      animation: fadeUp .7s .4s ease both;
+    }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--green);
+      color: #051005;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700; font-size: 14px;
+      padding: 14px 32px; border-radius: 100px;
+      border: none; cursor: pointer; text-decoration: none;
+      transition: transform .2s, box-shadow .2s;
+      letter-spacing: .04em;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(74,222,128,.35);
+    }
+
+    .hero-scroll {
+      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: var(--muted); font-size: 11px; letter-spacing: .1em;
+      animation: fadeIn 1s .8s ease both;
+    }
+
+    .scroll-line {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, var(--green), transparent);
+      animation: scrollPulse 1.8s ease infinite;
+    }
+
+    @keyframes scrollPulse {
+      0% { opacity: 0; transform: scaleY(0); transform-origin: top; }
+      50% { opacity: 1; transform: scaleY(1); }
+      100% { opacity: 0; transform: scaleY(1); }
+    }
+
+    /* ── Section shared ── */
+    section { position: relative; z-index: 1; }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: .15em;
+      color: var(--green);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      letter-spacing: -.02em;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .section-sub {
+      font-size: 16px; color: var(--muted);
+      margin-bottom: 56px;
+      max-width: 520px;
+    }
+
+    /* ── Day grid ── */
+    #programa { padding: 100px 0; }
+
+    .days-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      margin-bottom: 60px;
+    }
+
+    .day-tab {
+      background: var(--glass);
+      border: 1px solid rgba(74,222,128,.12);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      cursor: pointer;
+      transition: all .25s;
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .day-tab::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--green), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .3s;
+    }
+
+    .day-tab:hover, .day-tab.active {
+      background: rgba(74,222,128,.1);
+      border-color: rgba(74,222,128,.35);
+      transform: translateY(-2px);
+    }
+
+    .day-tab:hover::before, .day-tab.active::before { transform: scaleX(1); }
+
+    .day-tab.active .day-name { color: var(--green); }
+
+    .day-number {
+      font-family: 'Space Mono', monospace;
+      font-size: 32px; font-weight: 700;
+      color: var(--muted);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .day-tab.active .day-number { color: var(--green); }
+
+    .day-name {
+      font-size: 14px; font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .day-theme {
+      font-size: 11px; color: var(--muted);
+      font-weight: 500;
+    }
+
+    /* ── Day content panels ── */
+    .day-panel { display: none; }
+    .day-panel.active { display: block; animation: fadeUp .4s ease; }
+
+    /* ── Timeline ── */
+    .timeline { display: flex; flex-direction: column; gap: 0; }
+
+    .timeline-section-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: .15em;
+      color: var(--green);
+      text-transform: uppercase;
+      padding: 28px 0 16px;
+      display: flex; align-items: center; gap: 12px;
+    }
+
+    .timeline-section-title::after {
+      content: '';
+      flex: 1; height: 1px;
+      background: rgba(74,222,128,.15);
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 0 24px;
+      position: relative;
+      padding-bottom: 0;
+    }
+
+    .timeline-item:not(:last-child) .tl-content::before {
+      content: '';
+      position: absolute;
+      left: 110px; top: 22px; bottom: -1px;
+      width: 1px;
+      background: linear-gradient(to bottom, rgba(74,222,128,.25), transparent);
+      margin-left: 11px;
+      z-index: 0;
+    }
+
+    .tl-time {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px; color: var(--muted);
+      font-weight: 400;
+      padding-top: 14px;
+      text-align: right;
+      line-height: 1;
+    }
+
+    .tl-content {
+      position: relative;
+      padding: 10px 0 24px 28px;
+      border-left: 1px solid rgba(74,222,128,.15);
+    }
+
+    .tl-dot {
+      position: absolute;
+      left: -6px; top: 14px;
+      width: 11px; height: 11px;
+      background: var(--bg);
+      border: 2px solid var(--green);
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(74,222,128,.4);
+    }
+
+    .tl-dot.highlight {
+      background: var(--green);
+      box-shadow: 0 0 16px rgba(74,222,128,.6);
+    }
+
+    .tl-emoji { font-size: 18px; margin-bottom: 4px; line-height: 1; }
+
+    .tl-title {
+      font-size: 16px; font-weight: 600;
+      color: var(--text);
+      line-height: 1.3;
+      margin-bottom: 4px;
+    }
+
+    .tl-title em {
+      font-style: normal;
+      color: var(--green);
+    }
+
+    .tl-desc {
+      font-size: 13px; color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .tl-desc ul { padding-left: 16px; margin-top: 4px; }
+    .tl-desc li { margin-bottom: 2px; }
+
+    .tl-tag {
+      display: inline-block;
+      background: rgba(74,222,128,.1);
+      border: 1px solid rgba(74,222,128,.2);
+      color: var(--green);
+      font-size: 10px; font-weight: 700;
+      padding: 2px 10px; border-radius: 100px;
+      letter-spacing: .08em;
+      margin-top: 6px;
+    }
+
+    /* ── Speakers ── */
+    #ponentes { padding: 100px 0; background: linear-gradient(180deg, transparent, rgba(74,222,128,.03), transparent); }
+
+    .speakers-hook {
+      background: linear-gradient(135deg, rgba(74,222,128,.06) 0%, rgba(249,115,22,.05) 100%);
+      border: 1px solid rgba(74,222,128,.15);
+      border-left: 3px solid var(--green);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin-bottom: 48px;
+    }
+
+    .hook-headline {
+      font-size: clamp(1.1rem, 2vw, 1.35rem);
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.35;
+      margin-bottom: 10px;
+    }
+
+    .hook-body {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .speakers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .speaker-card {
+      background: var(--glass);
+      border: 1px solid rgba(74,222,128,.12);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: all .3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .speaker-card::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 80% 20%, rgba(74,222,128,.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .speaker-card:hover {
+      border-color: rgba(74,222,128,.35);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(0,0,0,.4), 0 0 0 1px rgba(74,222,128,.1);
+    }
+
+    .speaker-avatar {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--green-dark), #0d2e1a);
+      border: 2px solid rgba(74,222,128,.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px;
+      margin-bottom: 16px;
+    }
+
+    .speaker-name {
+      font-size: 18px; font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+
+    .speaker-topic {
+      font-size: 13px; color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .speaker-event {
+      margin-top: 14px;
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; color: var(--green);
+      font-weight: 600; letter-spacing: .06em;
+    }
+
+    /* ── Equipo Rural Hackers ── */
+    #equipo { padding: 100px 0; }
+
+    .team-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: end;
+      margin-bottom: 64px;
+    }
+
+    .team-intro {
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.75;
+      padding-bottom: 4px;
+    }
+
+    .team-list { display: flex; flex-direction: column; }
+
+    .team-row {
+      display: grid;
+      grid-template-columns: 56px 260px 1fr;
+      gap: 40px;
+      align-items: start;
+      padding: 40px 0;
+      border-top: 1px solid rgba(74,222,128,.08);
+      transition: border-color .3s;
+    }
+
+    .team-row:last-child { border-bottom: 1px solid rgba(74,222,128,.08); }
+    .team-row--centered { align-items: center; }
+    .team-row:hover { border-color: rgba(74,222,128,.22); }
+
+    .team-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      color: rgba(74,222,128,.3);
+      padding-top: 8px;
+      transition: color .3s;
+    }
+
+    .team-row:hover .team-num { color: var(--green); }
+
+    .team-name {
+      font-size: clamp(1.3rem, 2.5vw, 1.75rem);
+      font-weight: 700;
+      letter-spacing: -.02em;
+      margin-bottom: 10px;
+      color: var(--text);
+      transition: color .3s;
+    }
+
+    .team-row:hover .team-name { color: var(--green); }
+
+    .team-identity--avatar {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .team-avatar-pixel {
+      display: block;
+      width: 70px;
+      height: 84px;
+      object-fit: contain;
+      object-position: bottom center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      image-rendering: pixelated;
+      filter: drop-shadow(0 0 8px rgba(74,222,128,0.35)) drop-shadow(0 2px 12px rgba(0,0,0,0.6));
+      border-radius: 4px;
+      transition: filter .3s ease, transform .3s ease;
+    }
+    .team-avatar-pixel:hover {
+      filter: drop-shadow(0 0 16px rgba(74,222,128,0.75)) drop-shadow(0 0 32px rgba(74,222,128,0.3)) drop-shadow(0 2px 12px rgba(0,0,0,0.6));
+      transform: scale(1.08);
+    }
+
+    a.team-name-link {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+    }
+    a.team-name-link:hover {
+      color: var(--green);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-color: rgba(74,222,128,.4);
+    }
+
+    .team-role {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(74,222,128,.07);
+      border: 1px solid rgba(74,222,128,.18);
+      color: var(--green);
+      font-family: 'Space Mono', monospace;
+      font-size: 10px; font-weight: 700;
+      padding: 4px 12px; border-radius: 100px;
+      letter-spacing: .08em;
+    }
+
+    .team-bio {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.8;
+      padding-top: 8px;
+    }
+
+    @media (max-width: 900px) {
+      .team-header { grid-template-columns: 1fr; }
+      .team-row { grid-template-columns: 40px 1fr; grid-template-rows: auto auto; }
+      .team-bio { grid-column: 2; }
+    }
+
+    @media (max-width: 600px) {
+      .team-row { grid-template-columns: 1fr; gap: 12px; }
+      .team-bio { grid-column: 1; }
+    }
+
+    /* ── Ticker ── */
+    .ticker-band {
+      position: relative; z-index: 1;
+      border-top: 1px solid rgba(74,222,128,.08);
+      border-bottom: 1px solid rgba(74,222,128,.08);
+      background: rgba(0,0,0,.35);
+      display: flex;
+      align-items: stretch;
+      overflow: hidden;
+      height: 48px;
+    }
+
+    .ticker-label {
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--green);
+      color: #051005;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: .14em;
+      padding: 0 20px;
+      white-space: nowrap;
+      z-index: 2;
+    }
+
+    .ticker-label::after {
+      content: '';
+      position: absolute;
+      left: calc(20px + 6ch + 20px);
+      top: 0; bottom: 0;
+      width: 28px;
+      background: linear-gradient(90deg, var(--green), transparent);
+      pointer-events: none;
+    }
+
+    .ticker-track {
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      mask-image: linear-gradient(90deg, transparent 0%, black 3%, black 97%, transparent 100%);
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 3%, black 97%, transparent 100%);
+    }
+
+    .ticker-content {
+      display: inline-flex;
+      align-items: center;
+      gap: 0;
+      white-space: nowrap;
+      animation: tickerScroll 38s linear infinite;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .ticker-content:hover { animation-play-state: paused; }
+
+    .ticker-item { padding: 0 6px; }
+    .ticker-item.highlight { color: var(--green); font-weight: 700; }
+    .ticker-item.gold { color: var(--gold); font-weight: 700; }
+
+    .ticker-sep {
+      color: var(--muted);
+      padding: 0 4px;
+      font-size: 10px;
+    }
+
+    @keyframes tickerScroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ── About ── */
+    #sobre { padding: 100px 0; }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .about-text p {
+      font-size: 16px; color: var(--muted);
+      line-height: 1.8; margin-bottom: 16px;
+    }
+
+    .about-text p strong { color: var(--text); font-weight: 600; }
+
+    .about-features { display: flex; flex-direction: column; gap: 16px; padding-top: 32px; }
+
+    .feature-item {
+      background: var(--glass);
+      border: 1px solid rgba(74,222,128,.12);
+      border-radius: var(--radius-sm);
+      padding: 16px 20px;
+      display: flex; gap: 14px; align-items: flex-start;
+      transition: border-color .2s;
+    }
+
+    .feature-item:hover { border-color: rgba(74,222,128,.3); }
+
+    .feature-icon { font-size: 20px; line-height: 1; flex-shrink: 0; }
+
+    .feature-text strong {
+      display: block; font-size: 14px; font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .feature-text span { font-size: 13px; color: var(--muted); }
+
+    /* ── Location ── */
+    #lugar { padding: 80px 0; }
+
+    .location-card {
+      background: var(--glass);
+      border: 1px solid rgba(74,222,128,.12);
+      border-radius: var(--radius);
+      padding: 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .location-info h3 {
+      font-size: 22px; font-weight: 700; margin-bottom: 8px;
+    }
+
+    .location-info p {
+      font-size: 15px; color: var(--muted);
+      line-height: 1.7; margin-bottom: 20px;
+    }
+
+    .location-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .loc-tag {
+      background: rgba(74,222,128,.08);
+      border: 1px solid rgba(74,222,128,.2);
+      color: var(--green);
+      font-size: 12px; font-weight: 600;
+      padding: 5px 14px; border-radius: 100px;
+    }
+
+    .location-map {
+      border: 1px solid rgba(74,222,128,.2);
+      border-radius: var(--radius-sm);
+      height: 220px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .location-map iframe {
+      width: 100%; height: 100%;
+      border: none; display: block;
+      filter: invert(90%) hue-rotate(130deg) saturate(0.7) brightness(0.85);
+    }
+
+    .location-map a.map-link {
+      position: absolute; inset: 0;
+      z-index: 2;
+      display: flex; align-items: flex-end; justify-content: flex-end;
+      padding: 10px;
+      text-decoration: none;
+    }
+
+    .map-open-btn {
+      background: rgba(6,15,6,.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(74,222,128,.3);
+      color: var(--green);
+      font-family: 'Space Mono', monospace;
+      font-size: 10px; font-weight: 700;
+      letter-spacing: .08em;
+      padding: 6px 12px;
+      border-radius: 100px;
+      transition: background .2s;
+    }
+
+    .location-map a.map-link:hover .map-open-btn {
+      background: rgba(74,222,128,.15);
+    }
+
+    /* ── Hex divider ── */
+    .hex-divider {
+      position: relative; z-index: 1;
+      display: flex;
+      align-items: center;
+      padding: 0 64px;
+      height: 80px;
+    }
+
+    .hex-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(74,222,128,.2), rgba(74,222,128,.08));
+    }
+
+    .hex-line:last-child {
+      background: linear-gradient(90deg, rgba(74,222,128,.08), rgba(74,222,128,.2), transparent);
+    }
+
+    .hex-center {
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      width: 60px; height: 60px;
+      flex-shrink: 0;
+    }
+
+    .hex-rings {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .hex-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(74,222,128,.3);
+      animation: hexPulse 3s ease-out infinite;
+    }
+
+    .hex-ring-1 { width: 36px; height: 36px; animation-delay: 0s; }
+    .hex-ring-2 { width: 56px; height: 56px; animation-delay: .6s; border-color: rgba(74,222,128,.15); }
+    .hex-ring-3 { width: 76px; height: 76px; animation-delay: 1.2s; border-color: rgba(74,222,128,.07); }
+
+    @keyframes hexPulse {
+      0%   { transform: scale(.6); opacity: 0; }
+      30%  { opacity: 1; }
+      100% { transform: scale(1.4); opacity: 0; }
+    }
+
+    .hex-symbol {
+      position: relative; z-index: 1;
+      font-size: 22px;
+      color: var(--green);
+      text-shadow: 0 0 14px rgba(74,222,128,.7), 0 0 28px rgba(74,222,128,.3);
+      animation: hexGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes hexGlow {
+      0%, 100% { text-shadow: 0 0 14px rgba(74,222,128,.7), 0 0 28px rgba(74,222,128,.3); }
+      50%       { text-shadow: 0 0 20px rgba(74,222,128,1),  0 0 40px rgba(74,222,128,.5); }
+    }
+
+    /* ── Apoyo ── */
+    .apoyo-section {
+      position: relative; z-index: 1;
+      padding: 56px 0;
+    }
+
+    .apoyo-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .apoyo-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: .18em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .apoyo-logo-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      padding: 16px 32px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.07);
+      background: rgba(255,255,255,.03);
+      transition: all .3s;
+    }
+
+    .apoyo-logo-link:hover {
+      border-color: rgba(255,255,255,.15);
+      background: rgba(255,255,255,.06);
+      transform: translateY(-2px);
+    }
+
+    .wp-pill-logo {
+      height: 62px;
+      width: auto;
+      opacity: .55;
+      flex-shrink: 0;
+      transition: opacity .3s;
+    }
+
+    .apoyo-logo-link:hover .wp-pill-logo {
+      opacity: .85;
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      position: relative;
+      overflow: hidden;
+      padding: 140px 24px;
+      text-align: center;
+      background: linear-gradient(180deg, var(--bg) 0%, #050d05 40%, #020702 100%);
+    }
+    .cta-bg-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(74,222,128,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(74,222,128,.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
+    }
+    .cta-glow {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 700px; height: 400px;
+      background: radial-gradient(ellipse, rgba(74,222,128,.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+    .cta-eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      letter-spacing: .15em;
+      color: var(--green);
+      opacity: .7;
+      text-transform: uppercase;
+    }
+    .cta-title {
+      font-size: clamp(3.5rem, 10vw, 7rem);
+      font-weight: 900;
+      letter-spacing: -.04em;
+      line-height: 1;
+      color: var(--text);
+      margin: 0;
+    }
+    .cta-title-gradient {
+      background: linear-gradient(
+        105deg,
+        #4ade80 0%,
+        #86efac 18%,
+        #bbf7d0 36%,
+        #4ade80 50%,
+        #16a34a 64%,
+        #86efac 82%,
+        #4ade80 100%
+      );
+      background-size: 300% 100%;
+      background-position: 0% 50%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .cta-sub {
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      color: var(--muted);
+      max-width: 500px;
+      line-height: 1.7;
+    }
+    .cta-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 20px 48px;
+      margin-top: 8px;
+      background: var(--green);
+      color: #020702;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: .02em;
+      text-decoration: none;
+      border-radius: 4px;
+      overflow: hidden;
+      transition: transform .25s ease, box-shadow .25s ease;
+      box-shadow: 0 0 30px rgba(74,222,128,.25), 0 0 60px rgba(74,222,128,.1);
+    }
+    .cta-btn:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 0 50px rgba(74,222,128,.5), 0 0 100px rgba(74,222,128,.2);
+    }
+    .cta-btn:hover .cta-btn-arrow {
+      transform: translateX(5px);
+    }
+    .cta-btn-arrow {
+      font-size: 1.2rem;
+      transition: transform .25s ease;
+    }
+    .cta-btn-shine {
+      position: absolute;
+      top: 0; left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent);
+      transform: skewX(-20deg);
+      animation: btnShine 3s ease-in-out infinite;
+    }
+    @keyframes btnShine {
+      0%, 100% { left: -100%; }
+      50% { left: 160%; }
+    }
+    .cta-note {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .1em;
+      color: rgba(74,222,128,.4);
+      text-transform: uppercase;
+    }
+
+    /* ── Footer ── */
+    footer {
+      position: relative; z-index: 1;
+      border-top: 1px solid rgba(74,222,128,.08);
+      padding: 48px 24px;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 20px; font-weight: 700;
+      color: var(--green);
+      margin-bottom: 10px;
+      text-decoration: none;
+      display: inline-block;
+      transition: opacity .2s;
+    }
+    .footer-logo:hover { opacity: .75; }
+
+    .footer-tagline {
+      font-size: 14px; color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .footer-links { display: flex; justify-content: center; gap: 28px; flex-wrap: wrap; }
+
+    .footer-links a {
+      font-size: 13px; color: var(--muted); text-decoration: none;
+      transition: color .2s;
+    }
+
+    .footer-links a:hover { color: var(--green); }
+
+    .footer-copy {
+      margin-top: 32px;
+      font-size: 12px; color: #2a3a2a;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1; transform: translateY(0);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 100px 24px 80px;
+        text-align: center;
+      }
+      .hero-content { text-align: center; }
+      .hero-meta { justify-content: center; }
+      .hero-3d { height: 320px; order: -1; }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 12px 20px; }
+      .nav-links { display: none; }
+      .days-grid { grid-template-columns: repeat(2, 1fr); }
+      .timeline-item { grid-template-columns: 80px 1fr; }
+      .tl-content { padding-left: 20px; }
+      .about-grid, .location-card { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .days-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ── Glow dividers ── */
+    .glow-divider {
+      width: 100%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(74,222,128,.4), transparent);
+      position: relative; z-index: 1;
+    }
+  </style>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+
+<!-- Particles -->
+<canvas id="particles"></canvas>
+
+<!-- Navbar -->
+<nav>
+  <a class="nav-logo" href="#">⬡ RURAL HACKERS</a>
+  <div class="nav-links">
+    <a href="#programa">Programa</a>
+    <a href="#ponentes">Ponentes</a>
+    <a href="#equipo" class="nav-link-rh">Rural Hackers</a>
+    <a href="#sobre">Sobre el evento</a>
+    <a href="#lugar">Lugar</a>
+  </div>
+  <span class="nav-badge">24–28 JUN 2026</span>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-tag">Rural AI Meetup · Anceu, Galicia</div>
+    <h1>
+      <span class="line1">Tecnología,</span>
+      <span class="line2">Creatividad</span>
+      <span class="line3">&amp; Rural</span>
+    </h1>
+    <p class="hero-sub">La semana donde la comunidad de WordPress se pone al día con la IA.</p>
+
+    <div class="hero-meta">
+      <div class="chip"><span class="chip-icon">📍</span>Anceu, Ponte Caldelas</div>
+      <div class="chip"><span class="chip-icon">📅</span>24–28 Junio 2026</div>
+      <div class="chip"><span class="chip-icon">🌐</span>WordPress + IA + Open Source</div>
+    </div>
+
+    <div class="hero-cta">
+      <a href="#programa" class="btn-primary">Ver programa completo →</a>
+    </div>
+  </div>
+
+  <div class="hero-3d">
+    <canvas id="logo-3d"></canvas>
+    <div class="logo-glow"></div>
+  </div>
+
+  <div class="hero-scroll">
+    <span>SCROLL</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- Stats ticker -->
+<div class="ticker-band">
+  <div class="ticker-label">⬡ RURAL AI</div>
+  <div class="ticker-track">
+    <div class="ticker-content">
+      <span class="ticker-item highlight">Claude Code</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item">Comunidad WordPress</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item highlight">SEO con IA</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item">Anceu, Galicia</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item gold">24–28 Junio 2026</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item">n8n &amp; Automatización</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item highlight">Open Spaces de IA</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item">Prompt Engineering</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item gold">WordPress Meetup Pontevedra</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item">IDEs de Inteligencia Artificial</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item highlight">Rural Hackers</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item">Orquestadores de IA</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item">Creatividad &amp; Tecnología</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item highlight">Open Source</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item">Transformación Digital Rural</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item gold">Innovar desde el rural</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item highlight">WordPress.com</span><span class="ticker-sep">◆</span>
+      <!-- duplicate for seamless loop -->
+      <span class="ticker-item highlight">Claude Code</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item">Comunidad WordPress</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item highlight">SEO con IA</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item">Anceu, Galicia</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item gold">24–28 Junio 2026</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item">n8n &amp; Automatización</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item highlight">Open Spaces de IA</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item">Prompt Engineering</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item gold">WordPress Meetup Pontevedra</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item">IDEs de Inteligencia Artificial</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item highlight">Rural Hackers</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item">Orquestadores de IA</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item">Creatividad &amp; Tecnología</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item highlight">Open Source</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item">Transformación Digital Rural</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item gold">Innovar desde el rural</span><span class="ticker-sep">◆</span>
+      <span class="ticker-item highlight">WordPress.com</span><span class="ticker-sep">◆</span>
+    </div>
+  </div>
+</div>
+
+<div class="glow-divider"></div>
+
+<!-- Programa -->
+<section id="programa">
+  <div class="container">
+    <div class="section-label reveal">// programa</div>
+    <h2 class="section-title reveal">Agenda del evento</h2>
+    <p class="section-sub reveal">Selecciona un día para ver el programa detallado</p>
+
+    <div class="days-grid reveal">
+      <div class="day-tab active" onclick="showDay('mie')">
+        <div class="day-number">24</div>
+        <div class="day-name">Miércoles</div>
+        <div class="day-theme">Llegadas & Bienvenida</div>
+      </div>
+      <div class="day-tab" onclick="showDay('jue')">
+        <div class="day-number">25</div>
+        <div class="day-name">Jueves</div>
+        <div class="day-theme">Claude Code & SEO con IA</div>
+      </div>
+      <div class="day-tab" onclick="showDay('vie')">
+        <div class="day-number">26</div>
+        <div class="day-name">Viernes</div>
+        <div class="day-theme">IDEs de IA & Open Spaces</div>
+      </div>
+      <div class="day-tab" onclick="showDay('sab')">
+        <div class="day-number">27</div>
+        <div class="day-name">Sábado</div>
+        <div class="day-theme">WordPress Meetup & Fiesta</div>
+      </div>
+      <div class="day-tab" onclick="showDay('dom')">
+        <div class="day-number">28</div>
+        <div class="day-name">Domingo</div>
+        <div class="day-theme">Despedidas</div>
+      </div>
+    </div>
+
+    <!-- MIÉRCOLES -->
+    <div class="day-panel active" id="day-mie">
+      <div class="timeline">
+        <div class="timeline-section-title">Miércoles 24 de junio</div>
+        <div class="timeline-item">
+          <div class="tl-time">Todo el día</div>
+          <div class="tl-content">
+            <div class="tl-dot highlight"></div>
+            <div class="tl-emoji">🚐</div>
+            <div class="tl-title"><em>Arrivals</em> — Llegada de participantes</div>
+            <div class="tl-desc">Bienvenida progresiva y acomodación en Anceu Coliving.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-time">20:00</div>
+          <div class="tl-content">
+            <div class="tl-dot"></div>
+            <div class="tl-emoji">🍽️</div>
+            <div class="tl-title"><em>Cena de bienvenida</em></div>
+            <div class="tl-desc">Primera cena comunitaria.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-time">21:30</div>
+          <div class="tl-content">
+            <div class="tl-dot highlight"></div>
+            <div class="tl-emoji">💬</div>
+            <div class="tl-title"><em>Charla inaugural: ¿Qué es Rural Hackers?</em></div>
+            <div class="tl-desc">Qué hacemos, por qué lo hacemos y qué significa trabajar por el rural.</div>
+            <span class="tl-tag">CHARLA</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JUEVES -->
+    <div class="day-panel" id="day-jue">
+      <div class="timeline">
+        <div class="timeline-section-title">Jueves 25 de junio — Mañana</div>
+        <div class="timeline-item">
+          <div class="tl-time">09:30 – 10:30</div>
+          <div class="tl-content">
+            <div class="tl-dot highlight"></div>
+            <div class="tl-emoji">🤝</div>
+            <div class="tl-title"><em>Ice Breaking</em></div>
+            <div class="tl-desc">Actividades para conocerse y romper el hielo.</div>
+            <span class="tl-tag">NETWORKING</span>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-time">10:30 – 11:00</div>
+          <div class="tl-content">
+            <div class="tl-dot"></div>
+            <div class="tl-emoji">☕</div>
+            <div class="tl-title"><em>Pausa café</em></div>
+            <div class="tl-desc"></div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-time">11:00 – 14:00</div>
+          <div class="tl-content">
+            <div class="tl-dot highlight"></div>
+            <div class="tl-emoji">💻</div>
+            <div class="tl-title"><em>Taller: Claude Code</em></div>
+            <div class="tl-desc">CLI + Skills + capacidades avanzadas. Orientado a web, productividad y desarrollo de aplicaciones.</div>
+            <span class="tl-tag">TALLER</span>
+          </div>
+        </div>
+        <div class="timeline-section-title">Jueves 25 de junio — Tarde</div>
+        <div class="timeline-item">
+          <div class="tl-time">16:00 – 19:00</div>
+          <div class="tl-content">
+            <div class="tl-dot highlight"></div>
+            <div class="tl-emoji">🔍</div>
+            <div class="tl-title"><em>Taller: SEO con Claude Code</em></div>
+            <div class="tl-desc">Estrategias de posicionamiento web usando inteligencia artificial.</div>
+            <span class="tl-tag">TALLER</span>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-time">21:00</div>
+          <div class="tl-content">
+            <div class="tl-dot"></div>
+            <div class="tl-emoji">🍽️</div>
+            <div class="tl-title"><em>Cena</em></div>
+            <div class="tl-desc"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIERNES -->
+    <div class="day-panel" id="day-vie">
+      <div class="timeline">
+        <div class="timeline-section-title">Viernes 26 de junio — Mañana</div>
+        <div class="timeline-item">
+          <div class="tl-time">09:30 – 14:00</div>
+          <div class="tl-content">
+            <div class="tl-dot highlight"></div>
+            <div class="tl-emoji">🧠</div>
+            <div class="tl-title"><em>Taller: IDEs de IA</em></div>
+            <div class="tl-desc">n8n, OpenClaw, asistentes personales, orquestadores de IA.</div>
+            <span class="tl-tag">TALLER</span>
+          </div>
+        </div>
+        <div class="timeline-section-title">Viernes 26 de junio — Tarde</div>
+        <div class="timeline-item">
+          <div class="tl-time">15:30</div>
+          <div class="tl-content">
+            <div class="tl-dot"></div>
+            <div class="tl-emoji">🚶</div>
+            <div class="tl-title"><em>Paseito digestivo</em></div>
+            <div class="tl-desc">Tiempo libre para conectar con el entorno natural de Anceu.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-time">16:00 – 19:00</div>
+          <div class="tl-content">
+            <div class="tl-dot highlight"></div>
+            <div class="tl-emoji">🏕️</div>
+            <div class="tl-title"><em>Open Spaces de IA</em></div>
+            <div class="tl-desc">Las personas participantes pueden ofrecer un mini-taller sobre alguna herramienta o conocimiento de IA que dominen. Diferentes talleres simultáneos sobre diferentes herramientas.</div>
+            <span class="tl-tag">OPEN SPACE</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SÁBADO -->
+    <div class="day-panel" id="day-sab">
+      <div class="timeline">
+        <div class="timeline-section-title">Sábado 27 de junio — Mañana</div>
+        <div class="timeline-item">
+          <div class="tl-time">10:00 – 14:00</div>
+          <div class="tl-content">
+            <div class="tl-dot highlight"></div>
+            <div class="tl-emoji">🌐</div>
+            <div class="tl-title"><em>Meetup Pontevedra en Anceu Entreculturas</em></div>
+            <div class="tl-desc">
+              <strong>¿Qué viene en WordPress?</strong>
+              <ul>
+                <li>Juanma Prado</li>
+                <li>Ana Cirujano</li>
+                <li>Pablo Moratinos</li>
+              </ul>
+            </div>
+            <span class="tl-tag">MEETUP WORDPRESS</span>
+          </div>
+        </div>
+        <div class="timeline-section-title">Sábado 27 de junio — Noche</div>
+        <div class="timeline-item">
+          <div class="tl-time">21:00</div>
+          <div class="tl-content">
+            <div class="tl-dot highlight"></div>
+            <div class="tl-emoji">🎉</div>
+            <div class="tl-title"><em>Celebración con el pueblo</em></div>
+            <div class="tl-desc">Banda de música, cena comunitaria. Cada persona trae un plato para compartir.</div>
+            <span class="tl-tag">FIESTA</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOMINGO -->
+    <div class="day-panel" id="day-dom">
+      <div class="timeline">
+        <div class="timeline-section-title">Domingo 28 de junio</div>
+        <div class="timeline-item">
+          <div class="tl-time">Mañana</div>
+          <div class="tl-content">
+            <div class="tl-dot highlight"></div>
+            <div class="tl-emoji">👋</div>
+            <div class="tl-title"><em>Departures</em> — Despedidas</div>
+            <div class="tl-desc">Desayuno compartido y cierre del evento. Hasta la próxima.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="glow-divider"></div>
+
+<!-- Ponentes -->
+<section id="ponentes">
+  <div class="container">
+    <div class="section-label reveal">// ponentes wordpress meetup</div>
+    <h2 class="section-title reveal">Expertos en WordPress</h2>
+    <p class="section-sub reveal">Sábado 27 de junio · Anceu</p>
+
+    <div class="speakers-hook reveal">
+      <p class="hook-headline">La IA está redefiniendo WordPress. Y tú puedes ser de los primeros en aprovecharlo.</p>
+      <p class="hook-body">Expertos a la vanguardia del ecosistema te mostrarán las herramientas más nuevas, lo que viene y hacia dónde va la inteligencia artificial aplicada a contenido, SEO, diseño y desarrollo web.</p>
+    </div>
+
+    <div class="speakers-grid">
+      <div class="speaker-card reveal">
+        <div class="speaker-avatar">🧑‍💻</div>
+        <div class="speaker-name">Juanma Prado</div>
+        <div class="speaker-topic">Ponente invitado al WordPress Meetup de Pontevedra en Anceu. Compartirá su visión sobre el futuro de WordPress.</div>
+        <div class="speaker-event">🌐 WordPress Meetup</div>
+      </div>
+      <div class="speaker-card reveal">
+        <div class="speaker-avatar">👩‍💼</div>
+        <div class="speaker-name">Ana Cirujano</div>
+        <div class="speaker-topic">Ponente del WordPress Meetup. Presentará las novedades y tendencias más relevantes del ecosistema.</div>
+        <div class="speaker-event">🌐 WordPress Meetup</div>
+      </div>
+      <div class="speaker-card reveal">
+        <div class="speaker-avatar">🧑‍🎨</div>
+        <div class="speaker-name">Pablo Moratinos</div>
+        <div class="speaker-topic">Ponente del WordPress Meetup. Explorará las últimas características y el roadmap de WordPress.</div>
+        <div class="speaker-event">🌐 WordPress Meetup</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="glow-divider"></div>
+
+<!-- Equipo Rural Hackers -->
+<section id="equipo">
+  <div class="container">
+    <div class="team-header reveal">
+      <div>
+        <div class="section-label">// rural hackers</div>
+        <h2 class="section-title">Las personas que<br>lo hacen posible</h2>
+      </div>
+      <p class="team-intro">Cuatro perfiles distintos, un objetivo común: que la tecnología llegue a más personas desde el entorno rural.</p>
+    </div>
+
+    <div class="team-list">
+      <div class="team-row team-row--centered reveal">
+        <span class="team-num">01</span>
+        <div class="team-identity team-identity--avatar">
+          <img src="<?php echo $theme_uri; ?>/nacho.png" alt="Nacho Márquez" class="team-avatar-pixel">
+          <div>
+            <a class="team-name team-name-link" href="https://www.linkedin.com/in/ignacio-mrqz/" target="_blank" rel="noopener">Nacho Márquez</a>
+            <span class="team-role">IA & Producto</span>
+          </div>
+        </div>
+        <p class="team-bio">Cuando sale algo nuevo en IA, Nacho ya lo ha probado, lo ha destrozado y sabe exactamente para qué sirve. Lleva miles de horas investigando y te explica cómo sacarle el máximo partido. Le apasiona enseñar y lo hace con una paciencia que no todos tienen.</p>
+      </div>
+
+      <div class="team-row team-row--centered reveal">
+        <span class="team-num">02</span>
+        <div class="team-identity team-identity--avatar">
+          <img src="<?php echo $theme_uri; ?>/agustin.png" alt="Agustín Jamardo" class="team-avatar-pixel">
+          <div>
+            <a class="team-name team-name-link" href="https://www.linkedin.com/in/ajamardo/" target="_blank" rel="noopener">Agustín Jamardo</a>
+            <span class="team-role">Fullstack Dev</span>
+          </div>
+        </div>
+        <p class="team-bio">Programador fullstack con más de una década construyendo productos reales. De la base de datos al frontend, pasando por infraestructura y todo lo que hay en medio. El tipo que aparece cuando algo no funciona y nadie sabe por qué.</p>
+      </div>
+
+      <div class="team-row team-row--centered reveal">
+        <span class="team-num">03</span>
+        <div class="team-identity team-identity--avatar">
+          <img src="<?php echo $theme_uri; ?>/juan.png" alt="Juan Hernando" class="team-avatar-pixel">
+          <div>
+            <a class="team-name team-name-link" href="https://www.linkedin.com/in/juanhernando/" target="_blank" rel="noopener">Juan Hernando</a>
+            <span class="team-role">Comunidad WordPress</span>
+          </div>
+        </div>
+        <p class="team-bio">El alma de la comunidad WordPress. Lleva años tejiendo relaciones, organizando encuentros y haciendo que las personas se conozcan. Si hay comunidad, es porque hay alguien como Juan.</p>
+      </div>
+
+      <div class="team-row team-row--centered reveal">
+        <span class="team-num">04</span>
+        <div class="team-identity team-identity--avatar">
+          <img src="<?php echo $theme_uri; ?>/africa.png" alt="África Rodríguez" class="team-avatar-pixel">
+          <div>
+            <a class="team-name team-name-link" href="https://www.linkedin.com/in/rodriguezafricaruralhacker/" target="_blank" rel="noopener">África Rodríguez</a>
+            <span class="team-role">Comunidad & Territorio</span>
+          </div>
+        </div>
+        <p class="team-bio">El pegamento que mantiene todo unido. África es el puente real entre Rural Hackers y el pueblo de Anceu: conoce a cada persona, entiende cada contexto y convierte una idea en algo que aterrizas donde importa. Sin ella, mucho de esto no llegaría tan lejos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="glow-divider"></div>
+
+<!-- Sobre el evento -->
+<section id="sobre">
+  <div class="container">
+    <div class="section-label reveal">// sobre el evento</div>
+    <h2 class="section-title reveal">¿Qué es Rural AI Meetup?</h2>
+
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>Un encuentro único donde <strong>las comunidades de WordPress y la inteligencia artificial se encuentran con el entorno rural</strong>. Cinco días de aprendizaje, comunidad y conexión en Anceu, Ponte Caldelas, Galicia.</p>
+        <p>Organizado por <strong>Rural Hackers</strong> junto con <strong>WordPress.com</strong>, este evento es un reconocimiento a las personas que más han dado por las comunidades WordPress: una oportunidad de devolverles parte de lo que han aportado, ofreciéndoles las herramientas de IA que están transformando la forma de crear, diseñar y emprender.</p>
+        <p>Porque las comunidades son la clave para llegar a las personas. Y si queremos que la inteligencia artificial sea accesible para todo el mundo, tiene que pasar primero por <strong>quienes ya saben construir comunidad</strong>.</p>
+        <p><em>Lo técnico se mezcla con lo humano.</em></p>
+      </div>
+
+      <div class="about-features reveal">
+        <div class="feature-item">
+          <div class="feature-icon">💻</div>
+          <div class="feature-text">
+            <strong>Talleres prácticos de IA</strong>
+            <span>Claude Code, SEO con IA, IDEs y orquestadores de inteligencia artificial</span>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🏕️</div>
+          <div class="feature-text">
+            <strong>Open Spaces participativos</strong>
+            <span>Cada asistente puede ofrecer su propio mini-taller sobre lo que sabe</span>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🌐</div>
+          <div class="feature-text">
+            <strong>WordPress Meetup</strong>
+            <span>El meetup de Pontevedra llega a Anceu con ponentes de nivel nacional</span>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🎉</div>
+          <div class="feature-text">
+            <strong>Celebración con el pueblo</strong>
+            <span>Cena comunitaria, banda de música y fiesta para toda la aldea</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Hex divider -->
+<div class="hex-divider">
+  <div class="hex-line"></div>
+  <div class="hex-center">
+    <div class="hex-rings">
+      <div class="hex-ring hex-ring-1"></div>
+      <div class="hex-ring hex-ring-2"></div>
+      <div class="hex-ring hex-ring-3"></div>
+    </div>
+    <div class="hex-symbol">⬡</div>
+  </div>
+  <div class="hex-line"></div>
+</div>
+
+<!-- Apoyo -->
+<section class="apoyo-section">
+  <div class="container">
+    <div class="apoyo-inner reveal">
+      <span class="apoyo-label">Gracias a nuestra alianza con</span>
+      <a href="https://wordpress.com" target="_blank" rel="noopener" class="apoyo-logo-link" aria-label="WordPress.com">
+        <svg class="wp-pill-logo" viewBox="0 0 600 129" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="600" height="129" rx="64.5" fill="#3858E9"/><path fill-rule="evenodd" clip-rule="evenodd" d="M74.8749 93.2744L85.0001 63.8655C86.8887 59.1112 87.5182 55.3152 87.5182 51.9419C87.5182 50.7194 87.4358 49.5799 87.2934 48.5158C89.879 53.255 91.3554 58.7036 91.3554 64.4918C91.3554 76.7776 84.7303 87.5013 74.8749 93.2744ZM62.7713 48.878C64.7648 48.7724 66.5635 48.5611 66.5635 48.5611C68.3472 48.3498 68.1374 45.7085 66.3537 45.8141C66.3537 45.8141 60.9876 46.2367 57.5176 46.2367C54.2575 46.2367 48.7865 45.8141 48.7865 45.8141C46.9953 45.7085 46.7929 48.4554 48.5766 48.5611C48.5766 48.5611 50.2704 48.7724 52.0541 48.878L57.2178 63.0957L49.9631 84.9505L37.8894 48.878C39.8905 48.7724 41.6816 48.5611 41.6816 48.5611C43.4653 48.3498 43.2555 45.7085 41.4718 45.8141C41.4718 45.8141 36.1057 46.2367 32.6357 46.2367C32.0137 46.2367 31.2792 46.2217 30.4998 46.199C36.4355 37.1658 46.6205 31.1965 58.2071 31.1965C66.8408 31.1965 74.6951 34.5094 80.5933 39.9429C80.4509 39.9354 80.3085 39.9127 80.1661 39.9127C76.906 39.9127 74.5976 42.7653 74.5976 45.8217C74.5976 48.5686 76.1715 50.8854 77.8578 53.6324C79.1169 55.851 80.5933 58.6961 80.5933 62.8165C80.5933 65.6691 79.7539 69.2537 78.0676 73.5854L74.7625 84.6864L62.7788 48.8931L62.7713 48.878ZM58.2071 97.7948C54.9545 97.7948 51.8143 97.3118 48.8389 96.4364L58.7842 67.4048L68.9767 95.4478C69.0442 95.6138 69.1266 95.7647 69.2166 95.9081C65.7691 97.1231 62.0668 97.7948 58.2071 97.7948ZM25.0513 64.4918C25.0513 59.6621 26.0855 55.0813 27.9217 50.9382L43.7352 94.4592C32.6732 89.0634 25.0513 77.6757 25.0513 64.4918ZM58.2071 27.4609C37.8744 27.4609 21.334 44.0784 21.334 64.4994C21.334 84.9204 37.8744 101.538 58.2071 101.538C78.5398 101.538 95.0802 84.9204 95.0802 64.4994C95.0802 44.0784 78.5398 27.4609 58.2071 27.4609Z" fill="white"/><path d="M166.58 40.6242L158.084 75.4495H157.673L148.585 40.6242H140.227L131.156 75.4236H130.719L122.223 40.6242H113.041L126.347 87.9793H134.774L144.23 54.7472H144.599L154.038 87.9793H162.465L175.762 40.6242H166.58Z" fill="white"/><path d="M200.239 54.293C197.71 52.7688 194.718 52.0023 191.263 52.0023C187.808 52.0023 184.816 52.7688 182.287 54.293C179.758 55.8173 177.794 57.9615 176.406 60.7172C175.017 63.4729 174.322 66.6937 174.322 70.3622C174.322 74.0307 175.017 77.2343 176.406 79.9813C177.794 82.7284 179.758 84.8641 182.287 86.3884C184.816 87.9126 187.808 88.679 191.263 88.679C194.718 88.679 197.71 87.9126 200.239 86.3884C202.768 84.8641 204.731 82.7284 206.12 79.9813C207.509 77.2343 208.203 74.0307 208.203 70.3622C208.203 66.6937 207.509 63.4816 206.12 60.7172C204.731 57.9615 202.768 55.8173 200.239 54.293ZM198.824 76.2095C198.207 77.9662 197.264 79.3613 196.004 80.4033C194.743 81.4453 193.183 81.962 191.306 81.962C189.428 81.962 187.799 81.4453 186.53 80.4033C185.262 79.3613 184.319 77.9662 183.701 76.2095C183.075 74.4527 182.767 72.4979 182.767 70.3364C182.767 68.1749 183.075 66.1942 183.701 64.4288C184.319 62.6635 185.27 61.2598 186.53 60.2092C187.799 59.1585 189.385 58.6332 191.306 58.6332C193.226 58.6332 194.743 59.1585 196.004 60.2092C197.264 61.2598 198.198 62.6635 198.824 64.4288C199.45 66.1942 199.759 68.1663 199.759 70.3364C199.759 72.5065 199.45 74.4527 198.824 76.2095Z" fill="white"/><path d="M229.432 51.9618C227.409 51.9618 225.608 52.5216 224.031 53.6411C222.462 54.7606 221.347 56.3451 220.704 58.3947H220.336V52.4785H212.26V87.9926H220.593V67.1182C220.593 65.6112 220.936 64.2764 221.63 63.1138C222.325 61.9599 223.268 61.0556 224.476 60.4012C225.685 59.7467 227.04 59.4194 228.566 59.4194C229.269 59.4194 230.006 59.4711 230.761 59.5658C231.524 59.6692 232.072 59.7811 232.432 59.9017V52.2029C232.047 52.1254 231.566 52.0652 230.992 52.0307C230.418 51.9963 229.895 51.9704 229.44 51.9704L229.432 51.9618Z" fill="white"/><path d="M258.211 58.3386H257.868C257.439 57.4774 256.831 56.556 256.05 55.5743C255.27 54.5926 254.207 53.7572 252.87 53.0511C251.532 52.3535 249.835 52.0005 247.76 52.0005C245.043 52.0005 242.582 52.698 240.37 54.0931C238.158 55.4882 236.409 57.5463 235.115 60.2676C233.82 62.9888 233.169 66.3215 233.169 70.2656C233.169 74.2097 233.803 77.4821 235.081 80.2034C236.358 82.9333 238.09 85.0086 240.284 86.4468C242.479 87.8849 244.965 88.5997 247.743 88.5997C249.766 88.5997 251.447 88.2638 252.784 87.5835C254.121 86.9032 255.193 86.0851 256.008 85.1206C256.822 84.1561 257.439 83.2433 257.868 82.3821H258.374V87.9796H266.57V40.6246H258.211V58.3386ZM257.405 76.2593C256.762 77.9816 255.819 79.3336 254.576 80.2981C253.333 81.2626 251.832 81.7449 250.066 81.7449C248.3 81.7449 246.706 81.2454 245.454 80.2551C244.202 79.2647 243.259 77.8955 242.625 76.1646C241.99 74.4336 241.673 72.453 241.673 70.2312C241.673 68.0094 241.99 66.0718 242.616 64.3581C243.242 62.6444 244.185 61.3096 245.428 60.3365C246.671 59.3634 248.223 58.8811 250.075 58.8811C251.927 58.8811 253.384 59.3548 254.619 60.2934C255.853 61.2321 256.788 62.5497 257.431 64.2461C258.065 65.9426 258.382 67.9405 258.382 70.2312C258.382 72.5219 258.057 74.537 257.414 76.2679L257.405 76.2593Z" fill="white"/><path d="M299.97 42.6566C297.51 41.3046 294.466 40.6242 290.84 40.6242H273.162V87.9793H281.701V71.979H290.72C294.355 71.979 297.416 71.3073 299.902 69.9553C302.388 68.6033 304.265 66.7518 305.543 64.3922C306.82 62.0326 307.455 59.3372 307.455 56.2973C307.455 53.2574 306.82 50.6051 305.56 48.2369C304.291 45.8687 302.431 44.0086 299.97 42.6566ZM297.784 60.7581C297.133 62.0498 296.13 63.0746 294.784 63.8066C293.429 64.5472 291.697 64.9175 289.58 64.9175H281.71V47.7891H289.537C291.671 47.7891 293.412 48.1508 294.775 48.8655C296.13 49.5803 297.141 50.5792 297.793 51.8623C298.444 53.1455 298.77 54.6181 298.77 56.3059C298.77 57.9938 298.444 59.475 297.793 60.7667L297.784 60.7581Z" fill="white"/><path d="M327.969 51.9618C325.946 51.9618 324.146 52.5216 322.568 53.6411C320.999 54.7606 319.885 56.3451 319.242 58.3947H318.873V52.4785H310.797V87.9926H319.131V67.1182C319.131 65.6112 319.473 64.2764 320.168 63.1138C320.862 61.9599 321.805 61.0556 323.014 60.4012C324.223 59.7467 325.578 59.4194 327.104 59.4194C327.807 59.4194 328.544 59.4711 329.298 59.5658C330.061 59.6692 330.61 59.7811 330.97 59.9017V52.2029C330.584 52.1254 330.104 52.0652 329.53 52.0307C328.955 51.9963 328.432 51.9704 327.978 51.9704L327.969 51.9618Z" fill="white"/><path d="M359.528 56.2995C358.028 54.8355 356.313 53.7505 354.375 53.0529C352.438 52.3554 350.372 52.0023 348.194 52.0023C344.816 52.0023 341.876 52.7774 339.381 54.3275C336.878 55.8775 334.931 58.039 333.543 60.8034C332.154 63.5677 331.459 66.7798 331.459 70.4311C331.459 74.0824 332.154 77.372 333.534 80.1105C334.914 82.849 336.895 84.9588 339.458 86.4486C342.03 87.9384 345.082 88.679 348.631 88.679C351.375 88.679 353.818 88.2571 355.953 87.4217C358.087 86.5778 359.836 85.398 361.208 83.8652C362.58 82.3323 363.514 80.5325 364.003 78.4657L356.227 77.5873C355.859 78.5863 355.31 79.4302 354.59 80.1105C353.87 80.7908 353.021 81.2989 352.035 81.652C351.049 82.0051 349.952 82.1687 348.743 82.1687C346.934 82.1687 345.348 81.7812 344.002 80.9975C342.647 80.2225 341.601 79.0943 340.847 77.6218C340.118 76.2009 339.758 74.4958 339.732 72.5237H364.354V69.9575C364.354 66.8401 363.926 64.1619 363.069 61.897C362.211 59.6408 361.028 57.7807 359.536 56.3167L359.528 56.2995ZM339.758 66.8659C339.835 65.4794 340.178 64.1791 340.821 62.9907C341.533 61.6559 342.536 60.5795 343.822 59.7527C345.108 58.926 346.608 58.5127 348.314 58.5127C349.909 58.5127 351.306 58.8744 352.515 59.5977C353.724 60.3211 354.658 61.3114 355.336 62.5687C356.013 63.826 356.356 65.2555 356.373 66.8573H339.767L339.758 66.8659Z" fill="white"/><path d="M386.867 67.7271L380.84 66.4353C379.048 66.022 377.762 65.4881 376.982 64.8422C376.21 64.1963 375.825 63.3524 375.842 62.319C375.825 61.1134 376.408 60.1403 377.582 59.3824C378.757 58.6246 380.206 58.2457 381.946 58.2457C383.232 58.2457 384.321 58.4524 385.212 58.8744C386.104 59.2963 386.815 59.8389 387.338 60.5192C387.87 61.1995 388.239 61.9229 388.453 62.6893L396.049 61.854C395.483 58.8313 394 56.4373 391.616 54.6633C389.233 52.8893 385.967 52.0023 381.826 52.0023C379.005 52.0023 376.511 52.4415 374.359 53.3285C372.198 54.2155 370.518 55.4642 369.318 57.0745C368.117 58.6849 367.517 60.5881 367.534 62.7754C367.517 65.3675 368.323 67.5032 369.952 69.191C371.581 70.8789 374.084 72.0759 377.479 72.7821L383.506 74.0566C385.135 74.4097 386.335 74.9177 387.107 75.5808C387.878 76.2439 388.273 77.0879 388.273 78.104C388.273 79.3096 387.673 80.3172 386.464 81.1353C385.255 81.9534 383.669 82.3581 381.689 82.3581C379.708 82.3581 378.217 81.9534 377.016 81.1353C375.816 80.3172 375.036 79.1116 374.667 77.5012L366.54 78.2849C367.046 81.5486 368.623 84.0977 371.255 85.9233C373.896 87.749 377.376 88.6618 381.706 88.6618C384.655 88.6618 387.261 88.1796 389.533 87.2237C391.805 86.2678 393.58 84.9416 394.866 83.2365C396.143 81.5314 396.795 79.568 396.812 77.329C396.795 74.7886 395.971 72.7304 394.334 71.1545C392.697 69.5786 390.21 68.4332 386.867 67.7098V67.7271Z" fill="white"/><path d="M419.42 67.7271L413.393 66.4353C411.602 66.022 410.316 65.4881 409.536 64.8422C408.764 64.1963 408.378 63.3524 408.395 62.319C408.378 61.1134 408.961 60.1403 410.136 59.3824C411.31 58.6246 412.759 58.2457 414.499 58.2457C415.785 58.2457 416.874 58.4524 417.766 58.8744C418.657 59.2963 419.369 59.8389 419.892 60.5192C420.423 61.1995 420.792 61.9229 421.006 62.6893L428.602 61.854C428.036 58.8313 426.553 56.4373 424.17 54.6633C421.787 52.8893 418.52 52.0023 414.379 52.0023C411.559 52.0023 409.064 52.4415 406.912 53.3285C404.752 54.2155 403.071 55.4642 401.871 57.0745C400.671 58.6849 400.071 60.5881 400.088 62.7754C400.071 65.3675 400.877 67.5032 402.506 69.191C404.134 70.8789 406.638 72.0759 410.033 72.7821L416.06 74.0566C417.689 74.4097 418.889 74.9177 419.66 75.5808C420.432 76.2439 420.826 77.0879 420.826 78.104C420.826 79.3096 420.226 80.3172 419.017 81.1353C417.809 81.9534 416.223 82.3581 414.242 82.3581C412.262 82.3581 410.77 81.9534 409.57 81.1353C408.37 80.3172 407.589 79.1116 407.221 77.5012L399.093 78.2849C399.599 81.5486 401.177 84.0977 403.809 85.9233C406.449 87.749 409.93 88.6618 414.259 88.6618C417.208 88.6618 419.815 88.1796 422.087 87.2237C424.358 86.2678 426.133 84.9416 427.419 83.2365C428.696 81.5314 429.348 79.568 429.365 77.329C429.348 74.7886 428.525 72.7304 426.888 71.1545C425.25 69.5786 422.764 68.4332 419.42 67.7098V67.7271Z" fill="white"/><path d="M438.238 78.3633C436.841 78.3633 435.64 78.8542 434.646 79.8445C433.651 80.8348 433.154 82.0146 433.171 83.4011C433.154 84.822 433.643 86.019 434.646 87.0093C435.64 87.9996 436.841 88.4905 438.238 88.4905C439.147 88.4905 439.978 88.2666 440.733 87.8102C441.496 87.3538 442.104 86.7424 442.576 85.9759C443.048 85.2009 443.288 84.3483 443.305 83.4097C443.288 82.0232 442.782 80.8348 441.77 79.8531C440.758 78.8714 439.584 78.3719 438.238 78.3719V78.3633Z" fill="white"/><path d="M458.676 60.1317C459.962 59.2188 461.462 58.7538 463.168 58.7538C465.174 58.7538 466.786 59.3308 467.986 60.4761C469.187 61.6215 469.958 63.051 470.275 64.7647H478.24C478.06 62.207 477.305 59.968 475.985 58.0477C474.665 56.1273 472.899 54.6375 470.678 53.5869C468.458 52.5362 465.92 52.0023 463.048 52.0023C459.593 52.0023 456.61 52.7774 454.081 54.3275C451.56 55.8775 449.606 58.039 448.225 60.8034C446.845 63.5677 446.151 66.754 446.151 70.3622C446.151 73.9705 446.828 77.1223 448.191 79.878C449.554 82.6337 451.492 84.7866 454.012 86.3367C456.533 87.8954 459.559 88.6704 463.091 88.6704C466.049 88.6704 468.629 88.1279 470.824 87.0428C473.019 85.9578 474.751 84.4421 476.028 82.5131C477.305 80.5755 478.034 78.3538 478.24 75.8392H470.275C470.027 77.1223 469.581 78.2074 468.921 79.103C468.261 79.9986 467.446 80.6789 466.469 81.1525C465.492 81.6262 464.394 81.8587 463.168 81.8587C461.436 81.8587 459.928 81.3936 458.642 80.4636C457.364 79.5335 456.37 78.1987 455.658 76.4592C454.947 74.7197 454.604 72.6443 454.604 70.2244C454.604 67.8046 454.964 65.7808 455.675 64.0758C456.387 62.3621 457.39 61.0531 458.676 60.1317Z" fill="white"/><path d="M506.265 54.293C503.736 52.7688 500.744 52.0023 497.289 52.0023C493.834 52.0023 490.842 52.7688 488.313 54.293C485.784 55.8173 483.82 57.9615 482.432 60.7172C481.043 63.4729 480.348 66.6937 480.348 70.3622C480.348 74.0307 481.043 77.2343 482.432 79.9813C483.82 82.7284 485.784 84.8641 488.313 86.3884C490.842 87.9126 493.834 88.679 497.289 88.679C500.744 88.679 503.736 87.9126 506.265 86.3884C508.794 84.8641 510.757 82.7284 512.146 79.9813C513.535 77.2343 514.229 74.0307 514.229 70.3622C514.229 66.6937 513.535 63.4816 512.146 60.7172C510.757 57.9615 508.794 55.8173 506.265 54.293ZM504.85 76.2095C504.233 77.9662 503.29 79.3613 502.03 80.4033C500.769 81.4453 499.209 81.962 497.332 81.962C495.454 81.962 493.825 81.4453 492.556 80.4033C491.288 79.3613 490.345 77.9662 489.727 76.2095C489.101 74.4527 488.793 72.4979 488.793 70.3364C488.793 68.1749 489.101 66.1942 489.727 64.4288C490.345 62.6635 491.296 61.2598 492.556 60.2092C493.825 59.1585 495.411 58.6332 497.332 58.6332C499.252 58.6332 500.769 59.1585 502.03 60.2092C503.29 61.2598 504.224 62.6635 504.85 64.4288C505.476 66.1942 505.785 68.1663 505.785 70.3364C505.785 72.5065 505.476 74.4527 504.85 76.2095Z" fill="white"/><path d="M564.923 55.0995C562.865 53.0328 560.208 51.9994 556.958 51.9994C554.395 51.9994 552.183 52.585 550.314 53.7647C548.454 54.9445 547.125 56.5204 546.345 58.4925H545.976C545.299 56.486 544.142 54.9015 542.487 53.7389C540.841 52.5763 538.818 51.9908 536.426 51.9908C534.034 51.9908 532.028 52.5677 530.322 53.7131C528.616 54.8584 527.398 56.4516 526.661 58.4839H526.249V52.4472H518.285V87.9613H526.618V66.3635C526.618 64.8995 526.91 63.6164 527.493 62.5141C528.076 61.4118 528.856 60.5593 529.842 59.9479C530.828 59.3364 531.916 59.035 533.108 59.035C534.874 59.035 536.306 59.5862 537.403 60.6798C538.5 61.7735 539.049 63.2375 539.049 65.0717V87.9613H547.219V65.8123C547.219 63.8058 547.785 62.1782 548.908 60.921C550.04 59.6637 551.609 59.035 553.615 59.035C555.304 59.035 556.727 59.5517 557.893 60.5765C559.059 61.6013 559.642 63.2203 559.642 65.4162V87.9613H568.001V64.1245C568.001 60.1631 566.972 57.1491 564.914 55.0823L564.923 55.0995Z" fill="white"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="registro" class="cta-section">
+  <div class="cta-bg-grid"></div>
+  <div class="cta-glow"></div>
+  <div class="cta-inner reveal">
+    <p class="cta-eyebrow">// 24 – 28 junio · Anceu, Galicia</p>
+    <h2 class="cta-title"><span class="cta-title-gradient">¿Te apuntas?</span></h2>
+    <p class="cta-sub">Plazas limitadas. Cinco días de IA, comunidad y mucho WordPress en el corazón de Galicia.</p>
+    <a href="#" class="cta-btn">
+      <span class="cta-btn-text">Quiero apuntarme</span>
+      <span class="cta-btn-arrow">→</span>
+      <span class="cta-btn-shine"></span>
+    </a>
+    <p class="cta-note">Las inscripciones abren pronto.</p>
+  </div>
+</section>
+
+<!-- Location -->
+<section id="lugar">
+  <div class="container">
+    <div class="section-label reveal">// localización</div>
+    <h2 class="section-title reveal">Anceu, Galicia</h2>
+
+    <div class="location-card reveal">
+      <div class="location-info">
+        <h3>Anceu Coliving</h3>
+        <p>Un espacio único en Ponte Caldelas, Pontevedra. Un lugar donde la naturaleza gallega se convierte en el mejor escenario para pensar en tecnología y comunidad.</p>
+        <div class="location-tags">
+          <span class="loc-tag">📍 Ponte Caldelas, Pontevedra</span>
+          <span class="loc-tag">🌿 Entorno rural</span>
+          <span class="loc-tag">🏡 Alojamiento incluido</span>
+          <span class="loc-tag">🌊 Galicia profunda</span>
+        </div>
+      </div>
+      <div class="location-map">
+        <iframe
+          src="https://maps.google.com/maps?q=Anceu+Coliving+Ponte+Caldelas+Pontevedra+Galicia&t=&z=15&ie=UTF8&iwloc=&output=embed"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Anceu Coliving en Google Maps">
+        </iframe>
+        <a class="map-link" href="https://maps.google.com/maps?q=Anceu+Coliving+Ponte+Caldelas+Pontevedra+Galicia" target="_blank" rel="noopener">
+          <span class="map-open-btn">Abrir en Maps ↗</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <a class="footer-logo" href="https://www.instagram.com/ruralhackers" target="_blank" rel="noopener">⬡ RURAL HACKERS</a>
+  <p class="footer-tagline">Tecnología, creatividad y comunidad desde el mundo rural.</p>
+  <div class="footer-links">
+    <a href="https://ruralhackers.com" target="_blank" rel="noopener">ruralhackers.com</a>
+    <a href="#programa">Programa</a>
+    <a href="#ponentes">Ponentes</a>
+    <a href="#lugar">Lugar</a>
+  </div>
+  <p class="footer-copy">Rural AI Meetup Anceu · 24–28 junio 2026 · Ponte Caldelas, Galicia</p>
+</footer>
+
+<script>
+// ── Particles ──
+(function () {
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  class Particle {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * W;
+      this.y = Math.random() * H;
+      this.r = Math.random() * 1.5 + .3;
+      this.vx = (Math.random() - .5) * .3;
+      this.vy = (Math.random() - .5) * .3;
+      this.alpha = Math.random() * .5 + .1;
+    }
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      if (this.x < 0 || this.x > W || this.y < 0 || this.y > H) this.reset();
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(74,222,128,${this.alpha})`;
+      ctx.fill();
+    }
+  }
+
+  function init() {
+    resize();
+    particles = Array.from({ length: 70 }, () => new Particle());
+  }
+
+  function loop() {
+    ctx.clearRect(0, 0, W, H);
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist2 = dx * dx + dy * dy;
+        if (dist2 > 8100) continue;
+        const dist = Math.sqrt(dist2);
+        if (dist < 90) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(74,222,128,${(1 - dist / 100) * .08})`;
+          ctx.lineWidth = .5;
+          ctx.stroke();
+        }
+      }
+      particles[i].update();
+      particles[i].draw();
+    }
+    requestAnimationFrame(loop);
+  }
+
+  window.addEventListener('resize', () => { resize(); });
+  init();
+  loop();
+})();
+
+// ── Day tabs ──
+function showDay(id) {
+  document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.day-panel').forEach(p => p.classList.remove('active'));
+  const tabs = { mie: 0, jue: 1, vie: 2, sab: 3, dom: 4 };
+  document.querySelectorAll('.day-tab')[tabs[id]].classList.add('active');
+  document.getElementById('day-' + id).classList.add('active');
+}
+
+// ── Scroll reveal ──
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: .1, rootMargin: '0px 0px -60px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── Stagger reveals ──
+document.querySelectorAll('.speaker-card, .feature-item').forEach((el, i) => {
+  el.style.transitionDelay = (i * 0.08) + 's';
+});
+
+// ── "¿Te apuntas?" gradient mouse tracking ──
+(function () {
+  const el = document.querySelector('.cta-title-gradient');
+  if (!el) return;
+  let cur = 0, target = 0;
+  el.addEventListener('mouseleave', () => { target = 0; });
+  el.addEventListener('mousemove', e => {
+    const r = el.getBoundingClientRect();
+    target = ((e.clientX - r.left) / r.width) * 100;
+  });
+  (function tick() {
+    requestAnimationFrame(tick);
+    cur += (target - cur) * 0.05;
+    el.style.backgroundPosition = cur + '% 50%';
+  })();
+})();
+
+// ── "Creatividad" gradient mouse tracking ──
+(function () {
+  const el = document.querySelector('.hero h1 .line2');
+  if (!el) return;
+  let cur = 0, target = 0, hovering = false;
+  el.addEventListener('mouseenter', () => { hovering = true; });
+  el.addEventListener('mouseleave', () => { hovering = false; target = 0; });
+  el.addEventListener('mousemove', e => {
+    const r = el.getBoundingClientRect();
+    target = ((e.clientX - r.left) / r.width) * 100;
+  });
+  (function tick() {
+    requestAnimationFrame(tick);
+    cur += (target - cur) * 0.05;
+    el.style.backgroundPosition = cur + '% 50%';
+  })();
+})();
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+
+const canvas = document.getElementById('logo-3d');
+const container = canvas.parentElement;
+
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(container.clientWidth, container.clientHeight);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.2;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(38, container.clientWidth / container.clientHeight, 0.1, 100);
+camera.position.set(0, 0, 5);
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+const keyLight = new THREE.DirectionalLight(0xfff0e8, 2.2);
+keyLight.position.set(4, 6, 5);
+scene.add(keyLight);
+const fillLight = new THREE.DirectionalLight(0xffcf8f, 0.8);
+fillLight.position.set(-4, 0, 3);
+scene.add(fillLight);
+const rimLight = new THREE.DirectionalLight(0xff6a1a, 1.4);
+rimLight.position.set(-3, -3, -4);
+scene.add(rimLight);
+const pointLight = new THREE.PointLight(0xf97316, 3.5, 14);
+pointLight.position.set(0, 1, 4);
+scene.add(pointLight);
+
+const material = new THREE.MeshStandardMaterial({
+  color: 0xf97316,
+  emissive: 0xf97316,
+  emissiveIntensity: 0.14,
+  metalness: 0.3,
+  roughness: 0.4,
+});
+
+let model = null;
+const loader = new OBJLoader();
+loader.load('<?php echo $theme_uri; ?>/ruralhackers.obj',
+  (obj) => {
+    obj.traverse(child => {
+      if (child.isMesh) {
+        child.material = material;
+        child.geometry.computeVertexNormals();
+      }
+    });
+    const box = new THREE.Box3().setFromObject(obj);
+    const size = box.getSize(new THREE.Vector3());
+    const center = box.getCenter(new THREE.Vector3());
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const scale = 2.0 / maxDim;
+    obj.scale.setScalar(scale);
+    obj.position.set(-center.x * scale, -center.y * scale, -center.z * scale);
+    model = obj;
+    scene.add(model);
+  },
+  null,
+  (err) => console.warn('OBJ load error:', err)
+);
+
+let mode = 'auto';
+let autoRot = 0;
+let manualRotX = 0, manualRotY = 0;
+let dragVelX = 0, dragVelY = 0;
+let prevX = 0, prevY = 0;
+let tiltX = 0, tiltY = 0;
+let targetTiltX = 0, targetTiltY = 0;
+const INERTIA_DECAY = 0.92;
+
+canvas.style.cursor = 'grab';
+
+function onDown(x, y) {
+  mode = 'drag';
+  prevX = x; prevY = y;
+  dragVelX = 0; dragVelY = 0;
+  canvas.style.cursor = 'grabbing';
+}
+function onMove(x, y) {
+  if (mode === 'drag') {
+    const dx = x - prevX;
+    const dy = y - prevY;
+    dragVelX = dy * 0.009;
+    dragVelY = dx * 0.009;
+    manualRotX += dragVelX;
+    manualRotY += dragVelY;
+    prevX = x; prevY = y;
+  } else if (mode === 'auto') {
+    targetTiltX = (y / window.innerHeight - 0.5) * 0.2;
+    targetTiltY = (x / window.innerWidth  - 0.5) * 0.15;
+  }
+}
+function onUp() {
+  if (mode === 'drag') {
+    mode = 'inertia';
+    canvas.style.cursor = 'grab';
+  }
+}
+
+canvas.addEventListener('mousedown',  e => onDown(e.clientX, e.clientY));
+document.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+document.addEventListener('mouseup',   () => onUp());
+
+canvas.addEventListener('touchstart', e => {
+  onDown(e.touches[0].clientX, e.touches[0].clientY);
+  e.preventDefault();
+}, { passive: false });
+canvas.addEventListener('touchmove', e => {
+  if (mode === 'drag') {
+    onMove(e.touches[0].clientX, e.touches[0].clientY);
+    e.preventDefault();
+  }
+}, { passive: false });
+document.addEventListener('touchend', () => onUp());
+
+function animate() {
+  requestAnimationFrame(animate);
+  if (model) {
+    if (mode === 'auto') {
+      autoRot += 0.005;
+      tiltX += (targetTiltX - tiltX) * 0.04;
+      tiltY += (targetTiltY - tiltY) * 0.04;
+      model.rotation.x = tiltX;
+      model.rotation.y = autoRot + tiltY;
+    } else if (mode === 'drag') {
+      model.rotation.x = manualRotX;
+      model.rotation.y = manualRotY;
+    } else if (mode === 'inertia') {
+      dragVelX *= INERTIA_DECAY;
+      dragVelY *= INERTIA_DECAY;
+      manualRotX += dragVelX;
+      manualRotY += dragVelY;
+      model.rotation.x = manualRotX;
+      model.rotation.y = manualRotY;
+      if (Math.abs(dragVelX) < 0.0003 && Math.abs(dragVelY) < 0.0003) {
+        autoRot = manualRotY;
+        tiltX = manualRotX;
+        tiltY = 0; targetTiltX = 0; targetTiltY = 0;
+        mode = 'auto';
+      }
+    }
+  }
+  renderer.render(scene, camera);
+}
+animate();
+
+new ResizeObserver(() => {
+  const w = container.clientWidth;
+  const h = container.clientHeight;
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  renderer.setSize(w, h);
+}).observe(container);
+</script>
+</body>
+</html>

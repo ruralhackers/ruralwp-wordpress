@@ -1,0 +1,28 @@
+services:
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: ruralwp
+      MYSQL_USER: ruralwp
+      MYSQL_PASSWORD: ruralwp
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - db_data:/var/lib/mysql
+
+  wordpress:
+    image: wordpress:latest
+    restart: always
+    ports:
+      - "8090:80"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: ruralwp
+      WORDPRESS_DB_PASSWORD: ruralwp
+      WORDPRESS_DB_NAME: ruralwp
+    volumes:
+      - ./wp-content:/var/www/html/wp-content
+      - ./assets:/var/www/html/wp-content/themes/ruralwp/assets
+
+volumes:
+  db_data:
