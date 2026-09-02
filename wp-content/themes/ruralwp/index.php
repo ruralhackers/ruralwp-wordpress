@@ -1662,23 +1662,6 @@ $theme_uri = get_template_directory_uri();
   </div>
 </section>
 
-<!-- CTA -->
-<section id="registro" class="cta-section">
-  <div class="cta-bg-grid"></div>
-  <div class="cta-glow"></div>
-  <div class="cta-inner reveal">
-    <p class="cta-eyebrow">// 24 – 28 junio · Anceu, Galicia</p>
-    <h2 class="cta-title"><span class="cta-title-gradient">¿Te apuntas?</span></h2>
-    <p class="cta-sub">Plazas limitadas. Cinco días de IA, comunidad y mucho WordPress en el corazón de Galicia.</p>
-    <a href="#" class="cta-btn">
-      <span class="cta-btn-text">Quiero apuntarme</span>
-      <span class="cta-btn-arrow">→</span>
-      <span class="cta-btn-shine"></span>
-    </a>
-    <p class="cta-note">Las inscripciones abren pronto.</p>
-  </div>
-</section>
-
 <!-- Location -->
 <section id="lugar">
   <div class="container">
